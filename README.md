@@ -1,14 +1,23 @@
-# 用于文件大小校验的git-hook
+# 用于文件大小校验的 git-hook
 
-### docs
+### usage
 
+```bash
+npm install husky execa
+```
 
+在 package.json 上添加
 
-在package.json上添加
-
-``` javascript
-limit: {
-  size: 500,
-  reg: '/(png|jpe?g|gif)$/g'
+```json
+{
+  "limit": {
+    "size": 5, // 文件大小限制
+    "reg": "(png|jpe?g|gif)$" // 要限制的文件类型
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run limit" // 跑这个脚本的位置
+    }
+  }
 }
 ```

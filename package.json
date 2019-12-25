@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "bin": {
+    "limit": "./src/index.js"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -37,7 +40,7 @@
   },
   "limit": {
     "size": 5,
-    "reg": "(js)$"
+    "reg": "(png|jpe?g|gif)$"
   },
   "husky": {
     "hooks": {
