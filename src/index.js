@@ -1,8 +1,14 @@
+const path = require('path');
+
 const execa = require('execa');
 const chalk = require('chalk');
 
-const limit = 500;
-const imageReg = /(png|jpe?g|gif)$/g;
+const { limit } = require(path.resolve(process.cwd(), 'package.json'));
+
+const { size, reg } = limit;
+
+const fileLimitSize = size || 500;
+const fileGrobber = new RegExp(reg || `(png|jpe?g|gif)$`, 'g');
 
 async function getBigFiles() {
   try {
@@ -11,9 +17,9 @@ async function getBigFiles() {
 
     const bigFiles = [];
     files.forEach(async file => {
-      if (imageReg.test(file)) {
+      if (fileGrobber.test(file)) {
         const { stdout } = execa.sync('du', [file]);
-        if (parseInt(stdout.split('\t')[0]) > limit) {
+        if (parseInt(stdout.split('\t')[0]) > fileLimitSize) {
           bigFiles.push(stdout);
         }
       }
@@ -26,6 +32,7 @@ async function getBigFiles() {
 
 async function limitLint() {
   let bigFiles = await getBigFiles();
+  console.log('xx');
   if (bigFiles.length > 0) {
     console.log(chalk.red(bigFiles.join('\n')));
     console.log(chalk.red('为避免cdn被干死, 压缩图片后上传'));
